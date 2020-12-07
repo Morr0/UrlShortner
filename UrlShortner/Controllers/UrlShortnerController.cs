@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortner.Dtos;
@@ -15,6 +16,11 @@ namespace UrlShortner.Controllers
         public UrlShortnerController(IUrlShortnerService service)
         {
             _service = service;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            return Ok(await _service.GetMostViewed(10));
         }
 
         [HttpPost]

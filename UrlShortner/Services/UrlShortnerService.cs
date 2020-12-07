@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using UrlShortner.Dtos;
@@ -37,6 +38,19 @@ namespace UrlShortner.Services
         public Task<string> GetOriginalUrl(string shortendUrl)
         {
             return _repo.GetOriginalUrl(shortendUrl);
+        }
+
+        public async Task<Dictionary<string, long>> GetMostViewed(int amount)
+        {
+            var enumerable = await _repo.GetMostViewed(amount);
+            var dict = new Dictionary<string, long>();
+
+            foreach (var item in enumerable)
+            {
+                dict.Add(item.ShortendUrl, item.Views);
+            }
+
+            return dict;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,11 @@ namespace UrlShortner.Repositories
         public Task<bool> HasShortendUrl(string shortendUrl)
         {
             return _context.Shortcut.AsNoTracking().AnyAsync(x => x.ShortendUrl == shortendUrl);
+        }
+
+        public async Task<IEnumerable<Shortcut>> GetMostViewed(int amount)
+        {
+            return await _context.Shortcut.OrderByDescending(x => x.Views).Take(amount).ToArrayAsync().ConfigureAwait(false);
         }
     }
 }

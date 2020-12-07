@@ -17,6 +17,9 @@ namespace UrlShortner.Repositories
         {
             modelBuilder.Entity<Shortcut>()
                 .HasIndex(x => x.OriginalUrl);
+
+            modelBuilder.Entity<Shortcut>()
+                .HasIndex(x => x.Views);
         }
     }
 }
