@@ -11,5 +11,7 @@ namespace UrlShortner.Models
         public bool CustomUrl { get; set; }
         
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        
+        public long Views { get; set; }
     }
 }

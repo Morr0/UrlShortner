@@ -29,8 +29,15 @@ namespace UrlShortner.Repositories
 
         public async Task<string> GetOriginalUrl(string shortendUrl)
         {
-            return (await _context.Shortcut.FirstOrDefaultAsync(x => x.ShortendUrl == shortendUrl)
-                .ConfigureAwait(false))?.OriginalUrl;
+            Shortcut shortcut = await _context.Shortcut.FirstOrDefaultAsync(x => x.ShortendUrl == shortendUrl).ConfigureAwait(false);
+            if (shortcut == null) return null;
+
+            _context.Shortcut.Attach(shortcut);
+            shortcut.Views++;
+            _context.Entry(shortcut).Property(x => x.Views).IsModified = true;
+            await _context.SaveChangesAsync();
+            
+            return shortcut.OriginalUrl;
         }
 
         public Task<bool> HasShortendUrl(string shortendUrl)
