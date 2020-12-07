@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using UrlShortner.Dtos;
-using UrlShortner.Models;
+using UrlShortner.Factories;
 using UrlShortner.Repositories;
 
 namespace UrlShortner.Services
@@ -23,9 +23,8 @@ namespace UrlShortner.Services
             var shortcut = await _repo.Get(writeDto.OriginalUrl);
 
             if (shortcut != null) return _mapper.Map<ShortcutReadDto>(shortcut);
-
-            shortcut = _mapper.Map<Shortcut>(writeDto);
-            shortcut.ShortendUrl = Utilities.UrlShortner.Make(shortcut.OriginalUrl);
+            
+            shortcut = ShortcutFactory.CreateShortcut(ref _mapper, writeDto);
             await _repo.Add(shortcut).ConfigureAwait(false);
             
             return _mapper.Map<ShortcutReadDto>(shortcut);

@@ -8,6 +8,7 @@ namespace UrlShortner.Models
         [Key]
         public string ShortendUrl { get; set; }
         public string OriginalUrl { get; set; }
+        public bool CustomUrl { get; set; }
         
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
     }

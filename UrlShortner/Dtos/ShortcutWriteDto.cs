@@ -6,5 +6,6 @@ namespace UrlShortner.Dtos
     {
         [Required]
         public string OriginalUrl { get; set; }
+        public string DesiredUrl { get; set; }
     }
 }
