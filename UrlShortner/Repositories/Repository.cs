@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using UrlShortner.Dtos;
@@ -30,6 +31,11 @@ namespace UrlShortner.Repositories
         {
             return (await _context.Shortcut.FirstOrDefaultAsync(x => x.ShortendUrl == shortendUrl)
                 .ConfigureAwait(false))?.OriginalUrl;
+        }
+
+        public Task<bool> HasShortendUrl(string shortendUrl)
+        {
+            return _context.Shortcut.AsNoTracking().AnyAsync(x => x.ShortendUrl == shortendUrl);
         }
     }
 }

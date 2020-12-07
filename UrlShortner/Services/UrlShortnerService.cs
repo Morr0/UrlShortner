@@ -20,8 +20,12 @@ namespace UrlShortner.Services
         
         public async Task<ShortcutReadDto> Shorten(ShortcutWriteDto writeDto)
         {
-            var shortcut = await _repo.Get(writeDto.OriginalUrl);
-
+            if (!string.IsNullOrEmpty(writeDto.DesiredUrl))
+            {
+                if (await _repo.HasShortendUrl(writeDto.DesiredUrl)) return null;
+            }
+            
+            var shortcut = await _repo.Get(writeDto.OriginalUrl).ConfigureAwait(false);
             if (shortcut != null) return _mapper.Map<ShortcutReadDto>(shortcut);
             
             shortcut = ShortcutFactory.CreateShortcut(ref _mapper, writeDto);

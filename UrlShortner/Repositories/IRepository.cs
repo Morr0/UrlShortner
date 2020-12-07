@@ -9,5 +9,6 @@ namespace UrlShortner.Repositories
         Task Add(Shortcut shortcut);
         Task<Shortcut> Get(string originalUrl);
         Task<string> GetOriginalUrl(string shortendUrl);
+        Task<bool> HasShortendUrl(string shortendUrl);
     }
 }
