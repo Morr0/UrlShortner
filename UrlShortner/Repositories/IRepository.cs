@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using UrlShortner.Dtos;
+using UrlShortner.Models;
 
 namespace UrlShortner.Repositories
 {
     public interface IRepository
     {
-        Task<ShortcutReadDto> Add(ShortcutWriteDto writeDto);
+        Task Add(Shortcut shortcut);
+        Task<Shortcut> Get(ShortcutWriteDto writeDto);
     }
 }
