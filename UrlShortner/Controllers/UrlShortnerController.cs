@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortner.Dtos;
@@ -22,6 +22,15 @@ namespace UrlShortner.Controllers
         {
             var dto = await _service.Shorten(writeDto);
             return dto == null ? BadRequest() : Ok(dto) as IActionResult;
+        }
+
+        [HttpGet("{shortendUrl}")]
+        public async Task<IActionResult> RedirectToOriginalUrl([FromRoute][NotNull] string shortendUrl)
+        {
+            string originalUrl = await _service.GetOriginalUrl(shortendUrl);
+            if (originalUrl is null) return NotFound();
+
+            return Redirect(originalUrl);
         }
     }
 }

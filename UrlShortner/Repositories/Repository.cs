@@ -21,9 +21,15 @@ namespace UrlShortner.Repositories
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public Task<Shortcut> Get(ShortcutWriteDto writeDto)
+        public Task<Shortcut> Get(string originalUrl)
         {
-            return _context.Shortcut.FirstOrDefaultAsync(x => x.OriginalUrl == writeDto.OriginalUrl);
+            return _context.Shortcut.FirstOrDefaultAsync(x => x.OriginalUrl == originalUrl);
+        }
+
+        public async Task<string> GetOriginalUrl(string shortendUrl)
+        {
+            return (await _context.Shortcut.FirstOrDefaultAsync(x => x.ShortendUrl == shortendUrl)
+                .ConfigureAwait(false))?.OriginalUrl;
         }
     }
 }
