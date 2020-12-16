@@ -12,14 +12,23 @@ namespace UrlShortner.Repositories
         }
         
         public DbSet<Shortcut> Shortcut { get; set; }
+        public DbSet<ShortcutView> ShortcutView { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Shortcut>()
+                .HasKey(x => x.ShortendUrl);
+            modelBuilder.Entity<Shortcut>()
                 .HasIndex(x => x.OriginalUrl);
-
             modelBuilder.Entity<Shortcut>()
                 .HasIndex(x => x.Views);
+
+            modelBuilder.Entity<ShortcutView>()
+                .HasKey(x => x.Id);
+            modelBuilder.Entity<ShortcutView>()
+                .HasOne(x => x.Shortcut)
+                .WithMany(x => x.ShortcutViews)
+                .HasForeignKey(x => x.ShortendUrl);
         }
     }
 }

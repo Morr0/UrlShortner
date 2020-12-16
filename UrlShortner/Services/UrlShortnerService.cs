@@ -12,10 +12,12 @@ namespace UrlShortner.Services
     {
         private IRepository _repo;
         private IMapper _mapper;
+        private ShortcutViewRepository _shortcutViewRepo;
 
-        public UrlShortnerService(IRepository repository, IMapper mapper)
+        public UrlShortnerService(IRepository repository, ShortcutViewRepository shortcutViewRepository,IMapper mapper)
         {
             _repo = repository;
+            _shortcutViewRepo = shortcutViewRepository;
             _mapper = mapper;
         }
         
@@ -35,9 +37,12 @@ namespace UrlShortner.Services
             return _mapper.Map<ShortcutReadDto>(shortcut);
         }
 
-        public Task<string> GetOriginalUrl(string shortendUrl)
+        public async Task<string> GetOriginalUrl(string shortendUrl, string ipAddress)
         {
-            return _repo.GetOriginalUrl(shortendUrl);
+            string originalUrl = await _repo.GetOriginalUrl(shortendUrl).ConfigureAwait(false);
+            await _shortcutViewRepo.AddView(ShortcutViewFactory.CreateShortcutView(shortendUrl, ipAddress)).ConfigureAwait(false);
+            
+            return originalUrl;
         }
 
         public async Task<Dictionary<string, long>> GetMostViewed(int amount)

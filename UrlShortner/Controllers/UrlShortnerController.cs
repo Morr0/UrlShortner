@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortner.Dtos;
+using UrlShortner.Extensions;
 using UrlShortner.Services;
 
 namespace UrlShortner.Controllers
@@ -33,7 +34,7 @@ namespace UrlShortner.Controllers
         [HttpGet("{shortendUrl}")]
         public async Task<IActionResult> RedirectToOriginalUrl([FromRoute][NotNull] string shortendUrl)
         {
-            string originalUrl = await _service.GetOriginalUrl(shortendUrl);
+            string originalUrl = await _service.GetOriginalUrl(shortendUrl, this.IpAddress());
             if (originalUrl is null) return NotFound();
 
             return Redirect(originalUrl);

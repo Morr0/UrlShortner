@@ -31,6 +31,7 @@ namespace UrlShortner
                 builder => builder.UseSqlServer(Configuration.GetConnectionString("Sql")));
             
             services.AddTransient<IRepository, Repository>();
+            services.AddTransient<ShortcutViewRepository>();
 
             services.AddTransient<IUrlShortnerService, UrlShortnerService>();
 
