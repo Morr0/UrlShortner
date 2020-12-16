@@ -40,6 +40,7 @@ namespace UrlShortner.Services
         public async Task<string> GetOriginalUrl(string shortendUrl, string ipAddress)
         {
             string originalUrl = await _repo.GetOriginalUrl(shortendUrl).ConfigureAwait(false);
+            if (originalUrl is null) return null;
             await _shortcutViewRepo.AddView(ShortcutViewFactory.CreateShortcutView(shortendUrl, ipAddress)).ConfigureAwait(false);
             
             return originalUrl;
